@@ -1,0 +1,12 @@
+global
+body
+getarg
+var
+tk_asig :=
+mod
+write
+tk_par_izq
+tk_par_der
+fi
+end
+resource

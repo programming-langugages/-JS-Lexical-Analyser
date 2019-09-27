@@ -1,0 +1,5 @@
+<tk_num,2.5598055,1,1>
+<id,not3,1,10>
+<tk_distinto,1,14>
+<tk_num,88,1,16>
+>>> Error lexico(linea:1,posicion:18)
