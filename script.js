@@ -1,241 +1,169 @@
 //List of all tokens
-const tokenList = [{
-    name: "reserved",
-    regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)$/,
-    unique: true
-},
-{
-    name: "id",
-    regex: /^[a-zA-Z]+[0-9]*$/, 
-    unique: false
-},
-{
-    name: "tk_cadena",
-    regex: /^"[a-zA-Z0-9_ ]*$"/,
-    unique: false
-},
-{
-    name: "tk_asig",
-    regex: /^:=$/,
-    unique: true
-},
-{
-    name: "tk_coma",
-    regex: /^,$/,
-    unique: true
-},
-{
-    name: "tk_cuad_der",
-    regex: /^\]$/,
-    unique: true
-},
-{
-    name: "tk_cuad_izq",
-    regex: /^\[$/,
-    unique: true
-},
-{
-    name: "tk_distinto",
-    regex: /^!=$/,
-    unique: true
-},
-{
-    name: "tk_dos_puntos",
-    regex: /^:$/,
-    unique: true
-},
-{
-    name: "tk_ejecuta",
-    regex: /^->$/,
-    unique: true
-},
-{
-    name: "tk_expr_sinc",
-    regex: /^\?$/,
-    unique: true
-},
-{
-    name: "tk_multiplicacion",
-    regex: /^\*$/,
-    unique: true
-},
-{
-    name: "tk_par_izq",
-    regex: /^\($/,
-    unique: true
-},
-{
-    name: "tk_par_der",
-    regex: /^\)$/,
-    unique: true
-},
-
-{
-    name: "tk_punto_y_coma",
-    regex: /^;$/,
-    unique: true
-},
-{
-    name: "tk_resta",
-    regex: /^-$/,
-    unique: true
-},
-{
-    name: "tk_separa",
-    regex: /^\[\]$/,
-    unique: true
-},
-{
-    name: "tk_suma",
-    regex: /^\+$/,
-    unique: true
-},
-{
-    name: "tk_num_real",
-    regex: /^[0-9].[0-9]+[0-9]*$/,
-    unique: false
-},
-{
-    name: "tk_num",
-    regex: /^[0-9]+[0-9]*$/,
-    unique: false
-},
-
-{
-    name: "mod",
-    regex: /^mod$/,
-    unique: true
-},
-{
-    name: "tk_div",
-    regex: /^\/$/,
-    unique: true
-}
-]
-
-const tokenList2 = [
+const tokenList = [
     {
         name: "reserved",
-        regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)/,
-        unique: true
+        hardRegex: /^(global|body|create|destroy|external|getarg|get|global|import|int|mod|new|procedure|process|read|real|send|resource|returns|scanf|sem|sprintf|stop|writes|write|cap|ref|end|res|val|var|to|af|op|or|fa|fi|if)$/, 
+        softRegex: /^(global|body|create|destroy|external|getarg|get|global|import|int|mod|new|procedure|process|read|real|send|resource|returns|scanf|sem|sprintf|stop|writes|write|cap|ref|end|res|val|var|to|af|op|or|fa|fi|if)/,
+        print: "onlyWord"
     }
     ,
     {
         name: "id",
-        regex: /^[a-zA-Z]+[a-zA-Z0-9]*/,
-        unique: false
+        hardRegex: /^[a-zA-Z]+[a-zA-Z0-9]*$/,
+        softRegex: /^[a-zA-Z]+[a-zA-Z0-9]*/,
+        print: "wordAndToken"
     },
     {
-            name: "reserved",
-            regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)$/,
-            unique: true
-        },
-    {
         name: "tk_cadena",
-        regex: /^"[a-zA-Z0-9_ ]*"/,
-        unique: false
+        hardRegex: /^".*"$/,
+        softRegex: /^".*"/,
+        print: "wordAndToken"
     },
     {
         name: "tk_asig",
-        regex: /^:=/,
-        unique: true
+        hardRegex: /^:=$/,
+        softRegex: /^:=/,
+        print: "onlyToken"
     },
     {
         name: "tk_coma",
-        regex: /^,/,
-        unique: true
+        hardRegex: /^,$/,
+        softRegex: /^,/,
+        print: "onlyToken"
     },
     {
         name: "tk_cuad_der",
-        regex: /^\]/,
-        unique: true
+        hardRegex: /^\]$/,
+        softRegex: /^\]/,
+        print: "onlyToken"
     },
     {
         name: "tk_cuad_izq",
-        regex: /^\[/,
-        unique: true
+        hardRegex: /^\[$/,
+        softRegex: /^\[/,
+        print: "onlyToken"
     },
     {
         name: "tk_distinto",
-        regex: /^!=/,
-        unique: true
+        hardRegex: /^!=$/,
+        softRegex: /^!=/,
+        print: "onlyToken"
     },
     {
         name: "tk_dos_puntos",
-        regex: /^:/,
-        unique: true
+        hardRegex: /^:$/,
+        softRegex: /^:/,
+        print: "onlyToken"
     },
     {
         name: "tk_ejecuta",
-        regex: /^->/,
-        unique: true
+        hardRegex: /^->$/,
+        softRegex: /^->/,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_igual",
+        hardRegex: /^=$/,
+        softRegex: /^=/,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_menorque",
+        hardRegex: /^<$/,
+        softRegex: /^</,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_mayorque",
+        hardRegex: /^>$/,
+        softRegex: /^>/,
+        print: "onlyToken"
     },
     {
         name: "tk_expr_sinc",
-        regex: /^\?/,
-        unique: true
+        hardRegex: /^\?$/,
+        softRegex: /^\?/,
+        print: "onlyToken"
     },
     {
         name: "tk_multiplicacion",
-        regex: /^\*/,
-        unique: true
+        hardRegex: /^\*$/,
+        softRegex: /^\*/,
+        print: "onlyToken"
     },
     {
         name: "tk_par_izq",
-        regex: /^\(/,
-        unique: true
+        hardRegex: /^\($/,
+        softRegex: /^\(/,
+        print: "onlyToken"
     },
     {
         name: "tk_par_der",
-        regex: /^\)/,
-        unique: true
+        hardRegex: /^\)$/,
+        softRegex: /^\)/,
+        print: "onlyToken"
     },
  
     {
         name: "tk_punto_y_coma",
-        regex: /^;/,
-        unique: true
-    },
-    {
-        name: "tk_resta",
-        regex: /^-/,
-        unique: true
-    },
-    {
-        name: "tk_separa",
-        regex: /^\[\]/,
-        unique: true
-    },
-    {
-        name: "tk_suma",
-        regex: /^\+/,
-        unique: true
+        hardRegex: /^;$/,
+        softRegex: /^;/,
+        print: "onlyToken"
     },
     {
         name: "tk_num_real",
-        regex: /^[0-9].[0-9]+[0-9]*/,
-        unique: false
+        hardRegex: /^(-)?[0-9].[0-9]+[0-9]*$/,
+        softRegex: /^(-)?[0-9].[0-9]+[0-9]*/,
+        print: "wordAndToken"
     },
     {
         name: "tk_num",
-        regex: /^[0-9]+[0-9]*/,
-        unique: false
+        hardRegex: /^(-)?[0-9]+[0-9]*$/,
+        softRegex: /^(-)?[0-9]+[0-9]*/,
+        print: "wordAndToken"
     },
- 
+    {
+        name: "tk_resta",
+        hardRegex: /^-$/,
+        softRegex: /^-/,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_separa",
+        hardRegex: /^\[\]/,
+        softRegex: /^\[\]/,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_suma",
+        hardRegex: /^\+$/,
+        softRegex: /^\+/,
+        print: "onlyToken"
+    },
     {
         name: "mod",
-        regex: /^mod/,
-        unique: true
+        hardRegex: /^mod$/,
+        softRegex: /^mod/,
+        print: "onlyToken"
     },
     {
         name: "tk_div",
-        regex: /^\//,
-        unique: true
+        hardRegex: /^\/$/,
+        softRegex: /^\//,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_punto",
+        hardRegex: /^\.$/,
+        softRegex: /^\./,
+        print: "onlyToken"
     }
 ]
  
-//Regexs
+
+//Additional Regexs
 const commentRegex = /#.*/;
+
 
 // Useful Variables
 var lexical_analysis;
@@ -265,7 +193,6 @@ function lexicalAnalyzer(input, only_load) {
     for(var i = 0; i < lines.length; i++){
         var line = lines[i].replace(commentRegex, '');
         var words = splitWithIndex(line)
-        
         for(let word of words){
             if(word.name != ""){
                 if(!only_load){ //Sometimes we only need to load all the words but no do the analysis
@@ -288,7 +215,7 @@ function lexicalAnalyzer(input, only_load) {
 function findToken(word, row){
     var matched = false;
     for(let token of tokenList){
-        if(word.name.match(token.regex)){
+        if(word.name.match(token.hardRegex)){
             matched = true;
             print(token, word.name, word.column, row)
             break;
@@ -305,18 +232,22 @@ function deepFindToken(word, row, column) {
     var matched = false;
     var min_index_token = Number.MAX_SAFE_INTEGER;
     var token_to_match;
-    for (let token of tokenList2) {
-        if (word.match(token.regex)) {
+    for (let token of tokenList) {
+        if (word.match(token.softRegex)) {
             matched = true;
             // Get index of the matched regexep
-            if (token.regex.exec(word).index < min_index_token) {
-                min_index_token = token.regex.exec(word).index;
+            matched_word = token.softRegex.exec(word)
+            if (matched_word.index < min_index_token) {
+                min_index_token = matched_word.index;
                 token_to_match = token;
+            }else if(matched_word.index == min_index_token){ //Solve problem with global1(
+                if(token_to_match.softRegex.exec(word)[0] != matched_word[0])
+                    token_to_match = token;
             }
         }
     }
     if (matched) {
-        var matched_regexp = token_to_match.regex.exec(word)[0];
+        var matched_regexp = token_to_match.softRegex.exec(word)[0];
         print(token_to_match, matched_regexp, column, row)
         if (!(word === matched_regexp) && (matched_regexp.length != 0)) {
             var cropped_word = word.replace(matched_regexp, '');
@@ -332,27 +263,28 @@ function deepFindToken(word, row, column) {
 
 //Function that splits by spaces and saves the column of the word
 function splitWithIndex(line){
-    var splits = line.split(/ +(?=(?:(?:[^"]*"){2})*[^"]*$)/g);
+    var splits = line.split(/\s(?=(?:(?:[^"]*"){2})*[^"]*$)/g);
     var words=[]
     var index=0
     for(let split of splits){
-     words.push({ column: index+1, name: split})
-     index += split.length + 1
-    }
+        if(split!='')
+            words.push({ column: index+1, name: split})
+        index += split.length + 1
+    }     
+
     return words
 }
 
 
 //Function that prints the token
 function print(token, word, column, row){
-    if (token.name == "reserved")
+    if (token.print == "onlyWord")
         partial_lexical_analysis = "<" + word + "," + row + "," + column + ">\n";
-    else if (token.name == "id")
-        partial_lexical_analysis = "<" + token.name + "," + word + "," + row + "," + column + ">\n";
-    else if (token.unique == true)
+    else if (token.print == "onlyToken")
         partial_lexical_analysis =  "<" + token.name + "," + row + "," + column + ">\n";
-    else
-        partial_lexical_analysis =  "<" + token.name + "," + word + "," + row + "," + column + ">\n";
+    else if (token.print == "wordAndToken")
+        partial_lexical_analysis = "<" + token.name + "," + word + "," + row + "," + column + ">\n";
+    
     lexical_analysis += partial_lexical_analysis
 }
 
