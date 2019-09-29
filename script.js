@@ -138,10 +138,13 @@ function lexicalAnalyzer(input) {
     if (!input) code = document.getElementById("codeTextArea").value;
     else code = input;
     var lines = code.split(/\n/);
-    console.log(lines);
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i].replace(commentRegex, '');
+<<<<<<< Updated upstream
         //var words = splitWithIndex(line);
+=======
+        var words = splitWithIndex(line);
+>>>>>>> Stashed changes
         console.log(count_white_spaces(line));
         console.log("Processing line " + line.toString());
         lexical_analysis += findToken(line.trim(), i + 1, count_white_spaces(line) + 1, answer);
@@ -185,11 +188,7 @@ function findToken(word, row, column, answer) {
         if (word.match(token.regex)) {
             matched = true;
             counter += 1
-            // console.log("Which ");
-            // console.log(token);
-            // console.log(token.regex.exec(word));
             // Get index of the matched regexep
-            // console.log(token.regex.exec(word).index);
             if (token.regex.exec(word).index < min_index_token) {
                 min_index_token = token.regex.exec(word).index;
                 token_to_match = token;
@@ -198,14 +197,7 @@ function findToken(word, row, column, answer) {
     }
     console.log("Matched? " + matched);
     if (matched) {
-        console.log("Matched!");
-        console.log(token_to_match);
-        console.log(token_to_match.regex.exec(word));
-        console.log(token_to_match.regex.exec(word).index);
-        console.log("Matched!");
         var matched_regexp = token_to_match.regex.exec(word)[0];
-        console.log("MATCHED REGULAR EXPRESSION");
-        console.log(matched_regexp);
         //column += token_to_match.regex.exec(word).index;
         if (token_to_match.name == "reserved")
             answer += "<" + matched_regexp + "," + row + "," + column + ">\n";
@@ -215,10 +207,9 @@ function findToken(word, row, column, answer) {
             answer += "<" + token_to_match.name + "," + row + "," + column + ">\n";
         else
             answer += "<" + token_to_match.name + "," + matched_regexp + "," + row + "," + column + ">\n";
-        console.log("Answer until now");
-        console.log(answer + " " + word + " " + column + " " + row);
         if (!(word === matched_regexp) && (matched_regexp.length != 0)) {
             var cropped_word = word.replace(matched_regexp, '');
+<<<<<<< Updated upstream
 
             console.log("Next")
             console.log(cropped_word.trim());
@@ -229,6 +220,10 @@ function findToken(word, row, column, answer) {
             console.log(word[token_to_match.regex.exec(word).index + matched_regexp.length ]);
             console.log("offset " + offset);
             column += matched_regexp.length + offset // + count_white_spaces(word);
+=======
+            var offset = find_next_column(word, matched_regexp.length, cropped_word);
+            column += matched_regexp.length + 1 // + count_white_spaces(word);
+>>>>>>> Stashed changes
             return findToken(cropped_word.trim(), row, column, answer);
         }
 
