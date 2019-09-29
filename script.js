@@ -1,9 +1,119 @@
-//DIE EINZIGE, DIE FUNKTIONERT
-
-
-
 //List of all tokens
-const tokenList = [
+const tokenList = [{
+    name: "reserved",
+    regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)$/,
+    unique: true
+},
+{
+    name: "id",
+    regex: /^[a-zA-Z]+[0-9]*$/, 
+    unique: false
+},
+{
+    name: "tk_cadena",
+    regex: /^"[a-zA-Z0-9_ ]*$"/,
+    unique: false
+},
+{
+    name: "tk_asig",
+    regex: /^:=$/,
+    unique: true
+},
+{
+    name: "tk_coma",
+    regex: /^,$/,
+    unique: true
+},
+{
+    name: "tk_cuad_der",
+    regex: /^\]$/,
+    unique: true
+},
+{
+    name: "tk_cuad_izq",
+    regex: /^\[$/,
+    unique: true
+},
+{
+    name: "tk_distinto",
+    regex: /^!=$/,
+    unique: true
+},
+{
+    name: "tk_dos_puntos",
+    regex: /^:$/,
+    unique: true
+},
+{
+    name: "tk_ejecuta",
+    regex: /^->$/,
+    unique: true
+},
+{
+    name: "tk_expr_sinc",
+    regex: /^\?$/,
+    unique: true
+},
+{
+    name: "tk_multiplicacion",
+    regex: /^\*$/,
+    unique: true
+},
+{
+    name: "tk_par_izq",
+    regex: /^\($/,
+    unique: true
+},
+{
+    name: "tk_par_der",
+    regex: /^\)$/,
+    unique: true
+},
+
+{
+    name: "tk_punto_y_coma",
+    regex: /^;$/,
+    unique: true
+},
+{
+    name: "tk_resta",
+    regex: /^-$/,
+    unique: true
+},
+{
+    name: "tk_separa",
+    regex: /^\[\]$/,
+    unique: true
+},
+{
+    name: "tk_suma",
+    regex: /^\+$/,
+    unique: true
+},
+{
+    name: "tk_num_real",
+    regex: /^[0-9].[0-9]+[0-9]*$/,
+    unique: false
+},
+{
+    name: "tk_num",
+    regex: /^[0-9]+[0-9]*$/,
+    unique: false
+},
+
+{
+    name: "mod",
+    regex: /^mod$/,
+    unique: true
+},
+{
+    name: "tk_div",
+    regex: /^\/$/,
+    unique: true
+}
+]
+
+const tokenList2 = [
     {
         name: "reserved",
         regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)/,
@@ -80,7 +190,7 @@ const tokenList = [
         regex: /^\)/,
         unique: true
     },
-
+ 
     {
         name: "tk_punto_y_coma",
         regex: /^;/,
@@ -111,7 +221,7 @@ const tokenList = [
         regex: /^[0-9]+[0-9]*/,
         unique: false
     },
-
+ 
     {
         name: "mod",
         regex: /^mod/,
@@ -123,71 +233,81 @@ const tokenList = [
         unique: true
     }
 ]
-
-//Regex for a comment
+ 
+//Regexs
 const commentRegex = /#.*/;
-const beginOfStringRegex = /".+/;
-const endOfStringRegex = /.+"/;
+
+// Useful Variables
+var lexical_analysis;
+var partial_lexical_analysis;
+var wordsToAnalyse = []
+
+
+//Function to get next token
+function getNextToken(){
+    if(wordsToAnalyse.length==0)
+        lexicalAnalyzer(null, true)
+    token = wordsToAnalyse.shift()
+    findToken(token.word, token.row)
+    console.log(partial_lexical_analysis)
+}
 
 
 //Function that splits the code by breaklines and spaces to obtain the WORD
-function lexicalAnalyzer(input) {
+function lexicalAnalyzer(input, only_load) {
     var code;
-    var lexical_analysis = "";
-    var answer = "";
-    if (!input) code = document.getElementById("codeTextArea").value;
-    else code = input;
+    lexical_analysis = "";
+    if (!input) 
+        code = document.getElementById("codeTextArea").value;
+    else 
+        code = input;   
     var lines = code.split(/\n/);
-    for (var i = 0; i < lines.length; i++) {
+    for(var i = 0; i < lines.length; i++){
         var line = lines[i].replace(commentRegex, '');
-<<<<<<< Updated upstream
-        //var words = splitWithIndex(line);
-=======
-        var words = splitWithIndex(line);
->>>>>>> Stashed changes
-        console.log(count_white_spaces(line));
-        console.log("Processing line " + line.toString());
-        lexical_analysis += findToken(line.trim(), i + 1, count_white_spaces(line) + 1, answer);
-        // for(let word of words){
-        //   answer = "";
-        //   console.log("Entering");
-        //   console.log(word);
-        //     //if(word != "")
-        //       //lexical_analysis +=  findToken(word, i+1, answer)
-        // }
+        var words = splitWithIndex(line)
+        
+        for(let word of words){
+            if(word.name != ""){
+                if(!only_load){ //Sometimes we only need to load all the words but no do the analysis
+                    findToken(word, i+1)
+                    if(partial_lexical_analysis.match(/Error lexico/)){
+                        i = Number.MAX_SAFE_INTEGER //Force break of two loops
+                        break;
+                    }           
+                }  
+                wordsToAnalyse.push({word:word, row: i+1})
+            }    
+        }
     }
-    console.log("Analysis");
-    console.log(lexical_analysis);
+    if(!only_load)
+        console.log(lexical_analysis)
 }
+ 
 
-function count_white_spaces(line) {
-    var counter = 0;
-    for (var i = 0; i < line.length; i++) {
-        if (line[i] == ' ') {
-            counter += 1
-        } else {
+//Function that finds the token that matches that WORD, but only when it is an absolute match
+function findToken(word, row){
+    var matched = false;
+    for(let token of tokenList){
+        if(word.name.match(token.regex)){
+            matched = true;
+            print(token, word.name, word.column, row)
             break;
         }
     }
-    return counter;
+    if(!matched){
+        deepFindToken(word.name, row, word.column)
+    }
 }
-//Function that find the token that matches that WORD
-function findToken(word, row, column, answer) {
-    var matched = false;
-    //Check if the string is either empty or is composed of whitespaces
-    if (!word || (word.length === 0) || (word.match(/^\s*$/))) return answer
-    counter = 0;
 
+
+//Function that finds the token that matches one word, but only when it is within another one
+function deepFindToken(word, row, column) {
+    var matched = false;
     var min_index_token = Number.MAX_SAFE_INTEGER;
     var token_to_match;
-    for (let token of tokenList) {
-        console.log("Comparision");
-        console.log(token);
-        console.log(word);
-        console.log(word.match(token.regex));
+    for (let token of tokenList2) {
         if (word.match(token.regex)) {
             matched = true;
-            counter += 1
             // Get index of the matched regexep
             if (token.regex.exec(word).index < min_index_token) {
                 min_index_token = token.regex.exec(word).index;
@@ -195,69 +315,47 @@ function findToken(word, row, column, answer) {
             }
         }
     }
-    console.log("Matched? " + matched);
     if (matched) {
         var matched_regexp = token_to_match.regex.exec(word)[0];
-        //column += token_to_match.regex.exec(word).index;
-        if (token_to_match.name == "reserved")
-            answer += "<" + matched_regexp + "," + row + "," + column + ">\n";
-        else if (token_to_match.name == "id")
-            answer += "<" + token_to_match.name + "," + matched_regexp + "," + row + "," + column + ">\n";
-        else if (token_to_match.unique == true)
-            answer += "<" + token_to_match.name + "," + row + "," + column + ">\n";
-        else
-            answer += "<" + token_to_match.name + "," + matched_regexp + "," + row + "," + column + ">\n";
+        print(token_to_match, matched_regexp, column, row)
         if (!(word === matched_regexp) && (matched_regexp.length != 0)) {
             var cropped_word = word.replace(matched_regexp, '');
-<<<<<<< Updated upstream
-
-            console.log("Next")
-            console.log(cropped_word.trim());
-
-            var offset = find_next_column(word, token_to_match.regex.exec(word).index + matched_regexp.length, cropped_word.trim());
-            console.log("Fixing");
-            console.log(token_to_match.regex.exec(word).index + matched_regexp.length);
-            console.log(word[token_to_match.regex.exec(word).index + matched_regexp.length ]);
-            console.log("offset " + offset);
-            column += matched_regexp.length + offset // + count_white_spaces(word);
-=======
-            var offset = find_next_column(word, matched_regexp.length, cropped_word);
-            column += matched_regexp.length + 1 // + count_white_spaces(word);
->>>>>>> Stashed changes
-            return findToken(cropped_word.trim(), row, column, answer);
+            column += matched_regexp.length
+            deepFindToken(cropped_word.trim(), row, column);
         }
-
     } else {
-        answer += ">>> Error lexico(linea:" + row + ",posicion:" + column + ")\n"
-        return answer;
+        partial_lexical_analysis = ">>> Error lexico(linea:" + row + ",posicion:" + column + ")\n"
+        lexical_analysis += partial_lexical_analysis
     }
-    return answer;
 }
 
-function find_next_column(line, start, next) {
-    counter = 0;
-    for (var i = start; i < line.length; i++) {
-        if (line[i] == next[0]) {
-            break;
-        } else counter += 1;
-    }
-    return counter;
-}
+
 //Function that splits by spaces and saves the column of the word
-function splitWithIndex(line) {
-    var splits = line.split(/\s/)
-    var words = []
-    var index = 0
-    for (let split of splits) {
-        words.push({
-            column: index + 1,
-            name: split
-        })
-        index += split.length + 1
+function splitWithIndex(line){
+    var splits = line.split(/ +(?=(?:(?:[^"]*"){2})*[^"]*$)/g);
+    var words=[]
+    var index=0
+    for(let split of splits){
+     words.push({ column: index+1, name: split})
+     index += split.length + 1
     }
-    console.log("words " + words.toString());
     return words
 }
+
+
+//Function that prints the token
+function print(token, word, column, row){
+    if (token.name == "reserved")
+        partial_lexical_analysis = "<" + word + "," + row + "," + column + ">\n";
+    else if (token.name == "id")
+        partial_lexical_analysis = "<" + token.name + "," + word + "," + row + "," + column + ">\n";
+    else if (token.unique == true)
+        partial_lexical_analysis =  "<" + token.name + "," + row + "," + column + ">\n";
+    else
+        partial_lexical_analysis =  "<" + token.name + "," + word + "," + row + "," + column + ">\n";
+    lexical_analysis += partial_lexical_analysis
+}
+
 
 //Function that reads a file
 function readTextFile(file) {
@@ -273,7 +371,7 @@ function readTextFile(file) {
     }
     rawFile.send(null);
 }
-
+ 
 function testInputs() {
     const input1 = `global sizes
    # matrix dimension, default 10
@@ -288,7 +386,7 @@ function testInputs() {
        write("N must be a multiple of PR"); stop (1)
      fi
    end`;
-
+ 
     const output1 = `<global,1,1>
 <id,sizes,1,8>
 <var,3,4>
@@ -344,7 +442,7 @@ function testInputs() {
 <end,13,1>
                   `;
     const input2 = `2.5598055not3!=88&56.a`;
-
+ 
     const output2 = `<tk_num,2.5598055,1,1>
     <id,not3,1,10>
     <tk_distinto,1,14>
@@ -360,8 +458,8 @@ i1if
 ifif
 if`
   const output4 = ` SIN GETARG ERROR LEXICO`
-
-
+ 
+ 
     console.log(lexicalAnalyzer(input1));
-
+ 
 }
