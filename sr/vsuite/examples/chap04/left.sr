@@ -1,3 +1,0 @@
-proc left(i) returns lft
-  lft := (i-2) mod 5 + 1
-end

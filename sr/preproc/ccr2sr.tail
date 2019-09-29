@@ -1,1 +1,0 @@
-$CCPATH -E $TMPFILE | sed "$SCRIPT" >> $SRFILE

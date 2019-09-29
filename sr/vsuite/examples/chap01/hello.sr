@@ -1,3 +1,0 @@
-resource hello()
-  write("Hello world")
-end

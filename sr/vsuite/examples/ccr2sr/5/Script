@@ -1,3 +1,0 @@
-0 ccr2sr a.ccr
-0 sr -C a.sr
-0 rm -rf Interfaces core *.out a.sr
