@@ -1,14 +1,25 @@
+//DIE EINZIGE, DIE FUNKTIONERT
+
+
+
 //List of all tokens
-const tokenList = [{
+const tokenList = [
+    {
         name: "reserved",
-        regex: /(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)/,
+        regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)/,
         unique: true
-    },
+    }
+    ,
     {
         name: "id",
-        regex: /^[a-zA-Z]+[0-9]*/,
+        regex: /^[a-zA-Z]+[a-zA-Z0-9]*/,
         unique: false
     },
+    {
+            name: "reserved",
+            regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)$/,
+            unique: true
+        },
     {
         name: "tk_cadena",
         regex: /^"[a-zA-Z0-9_ ]*"/,
@@ -130,10 +141,10 @@ function lexicalAnalyzer(input) {
     console.log(lines);
     for (var i = 0; i < lines.length; i++) {
         var line = lines[i].replace(commentRegex, '');
-        var words = splitWithIndex(line);
-        console.log("ajsoaidjoisajdoiasjda");
+        //var words = splitWithIndex(line);
         console.log(count_white_spaces(line));
-        lexical_analysis += findToken(line, i + 1, count_white_spaces(line) + 1, answer);
+        console.log("Processing line " + line.toString());
+        lexical_analysis += findToken(line.trim(), i + 1, count_white_spaces(line) + 1, answer);
         // for(let word of words){
         //   answer = "";
         //   console.log("Entering");
@@ -161,12 +172,16 @@ function count_white_spaces(line) {
 function findToken(word, row, column, answer) {
     var matched = false;
     //Check if the string is either empty or is composed of whitespaces
-    if (!word || (word.length === 0) || (!word.replace(/\s/g, '').length)) return answer
+    if (!word || (word.length === 0) || (word.match(/^\s*$/))) return answer
     counter = 0;
 
     var min_index_token = Number.MAX_SAFE_INTEGER;
     var token_to_match;
     for (let token of tokenList) {
+        console.log("Comparision");
+        console.log(token);
+        console.log(word);
+        console.log(word.match(token.regex));
         if (word.match(token.regex)) {
             matched = true;
             counter += 1
@@ -181,6 +196,7 @@ function findToken(word, row, column, answer) {
             }
         }
     }
+    console.log("Matched? " + matched);
     if (matched) {
         console.log("Matched!");
         console.log(token_to_match);
@@ -205,10 +221,14 @@ function findToken(word, row, column, answer) {
             var cropped_word = word.replace(matched_regexp, '');
 
             console.log("Next")
-            console.log(cropped_word);
-            var offset = find_next_column(word, matched_regexp.length, cropped_word);
+            console.log(cropped_word.trim());
+
+            var offset = find_next_column(word, token_to_match.regex.exec(word).index + matched_regexp.length, cropped_word.trim());
+            console.log("Fixing");
+            console.log(token_to_match.regex.exec(word).index + matched_regexp.length);
+            console.log(word[token_to_match.regex.exec(word).index + matched_regexp.length ]);
             console.log("offset " + offset);
-            column += matched_regexp.length + 1 // + count_white_spaces(word);
+            column += matched_regexp.length + offset // + count_white_spaces(word);
             return findToken(cropped_word.trim(), row, column, answer);
         }
 
@@ -222,7 +242,7 @@ function findToken(word, row, column, answer) {
 function find_next_column(line, start, next) {
     counter = 0;
     for (var i = start; i < line.length; i++) {
-        if (line[start] == next[0]) {
+        if (line[i] == next[0]) {
             break;
         } else counter += 1;
     }
@@ -338,6 +358,13 @@ function testInputs() {
     const input3 = `!=$`;
     const output3 = `<tk_distinto,1,1>
     >>> Error lexico(linea:1,posicion:3)`;
+    const input4 = `     ()(()()()()()())()&getarg!=
+global1
+global
+i1if
+ifif
+if`
+  const output4 = ` SIN GETARG ERROR LEXICO`
 
 
     console.log(lexicalAnalyzer(input1));
