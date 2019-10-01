@@ -205,8 +205,13 @@ function lexicalAnalyzer(input, only_load) {
             }
         }
     }
-    if(!only_load)
+    if(!only_load){
         console.log(lexical_analysis)
+        $('#result').html(lexical_analysis.replace(/&/g, '&amp;')
+                                        .replace(/>/g, '&gt;')
+                                        .replace(/</g, '&lt;')
+                                        .replace(/\n/g,'<br/>'))
+    }  
 }
 
 
