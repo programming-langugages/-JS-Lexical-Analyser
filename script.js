@@ -178,10 +178,10 @@ function findToken(word, row, column, answer) {
     var min_index_token = Number.MAX_SAFE_INTEGER;
     var token_to_match;
     for (let token of tokenList) {
-        console.log("Comparision");
-        console.log(token);
-        console.log(word);
-        console.log(word.match(token.regex));
+        // console.log("Comparision");
+        // console.log(token);
+        // console.log(word);
+        // console.log(word.match(token.regex));
         if (word.match(token.regex)) {
             matched = true;
             counter += 1
