@@ -1,268 +1,292 @@
-//DIE EINZIGE, DIE FUNKTIONERT
-
-
-
 //List of all tokens
 const tokenList = [
     {
         name: "reserved",
-        regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)/,
-        unique: true
+        hardRegex: /^(global|body|create|destroy|external|getarg|get|global|import|int|mod|new|procedure|process|read|real|send|resource|returns|scanf|sem|sprintf|stop|writes|write|cap|ref|end|res|val|var|to|af|op|or|fa|fi|if)$/,
+        softRegex: /^(global|body|create|destroy|external|getarg|get|global|import|int|mod|new|procedure|process|read|real|send|resource|returns|scanf|sem|sprintf|stop|writes|write|cap|ref|end|res|val|var|to|af|op|or|fa|fi|if)/,
+        print: "onlyWord"
     }
     ,
     {
         name: "id",
-        regex: /^[a-zA-Z]+[a-zA-Z0-9]*/,
-        unique: false
+        hardRegex: /^[a-zA-Z]+[a-zA-Z0-9]*$/,
+        softRegex: /^[a-zA-Z]+[a-zA-Z0-9]*/,
+        print: "wordAndToken"
     },
     {
-            name: "reserved",
-            regex: /^(global|var|body|destroy|end|external|fa|fi|getarg|get|global|import|if|int|mod|new|op|process|read|real|ref|resource|res|returns|scanf|sem|sprintf|stop|to|val|var|writes|write)$/,
-            unique: true
-        },
-    {
         name: "tk_cadena",
-        regex: /^"[a-zA-Z0-9_ ]*"/,
-        unique: false
+        hardRegex: /^".*"$/,
+        softRegex: /^".*"/,
+        print: "wordAndToken"
     },
     {
         name: "tk_asig",
-        regex: /^:=/,
-        unique: true
+        hardRegex: /^:=$/,
+        softRegex: /^:=/,
+        print: "onlyToken"
     },
     {
         name: "tk_coma",
-        regex: /^,/,
-        unique: true
+        hardRegex: /^,$/,
+        softRegex: /^,/,
+        print: "onlyToken"
     },
     {
-        name: "tk_cuad_der",
-        regex: /^\]/,
-        unique: true
+        name: "tk_cor_der",
+        hardRegex: /^\]$/,
+        softRegex: /^\]/,
+        print: "onlyToken"
     },
     {
-        name: "tk_cuad_izq",
-        regex: /^\[/,
-        unique: true
+        name: "tk_cor_izq",
+        hardRegex: /^\[$/,
+        softRegex: /^\[/,
+        print: "onlyToken"
     },
     {
         name: "tk_distinto",
-        regex: /^!=/,
-        unique: true
+        hardRegex: /^!=$/,
+        softRegex: /^!=/,
+        print: "onlyToken"
     },
     {
         name: "tk_dos_puntos",
-        regex: /^:/,
-        unique: true
+        hardRegex: /^:$/,
+        softRegex: /^:/,
+        print: "onlyToken"
     },
     {
         name: "tk_ejecuta",
-        regex: /^->/,
-        unique: true
+        hardRegex: /^->$/,
+        softRegex: /^->/,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_igual",
+        hardRegex: /^=$/,
+        softRegex: /^=/,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_menorque",
+        hardRegex: /^<$/,
+        softRegex: /^</,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_mayorque",
+        hardRegex: /^>$/,
+        softRegex: /^>/,
+        print: "onlyToken"
     },
     {
         name: "tk_expr_sinc",
-        regex: /^\?/,
-        unique: true
+        hardRegex: /^\?$/,
+        softRegex: /^\?/,
+        print: "onlyToken"
     },
     {
-        name: "tk_multiplicacion",
-        regex: /^\*/,
-        unique: true
+        name: "tk_multi",
+        hardRegex: /^\*$/,
+        softRegex: /^\*/,
+        print: "onlyToken"
     },
     {
         name: "tk_par_izq",
-        regex: /^\(/,
-        unique: true
+        hardRegex: /^\($/,
+        softRegex: /^\(/,
+        print: "onlyToken"
     },
     {
         name: "tk_par_der",
-        regex: /^\)/,
-        unique: true
+        hardRegex: /^\)$/,
+        softRegex: /^\)/,
+        print: "onlyToken"
     },
 
     {
         name: "tk_punto_y_coma",
-        regex: /^;/,
-        unique: true
-    },
-    {
-        name: "tk_resta",
-        regex: /^-/,
-        unique: true
-    },
-    {
-        name: "tk_separa",
-        regex: /^\[\]/,
-        unique: true
-    },
-    {
-        name: "tk_suma",
-        regex: /^\+/,
-        unique: true
-    },
-    {
-        name: "tk_num_real",
-        regex: /^[0-9].[0-9]+[0-9]*/,
-        unique: false
+        hardRegex: /^;$/,
+        softRegex: /^;/,
+        print: "onlyToken"
     },
     {
         name: "tk_num",
-        regex: /^[0-9]+[0-9]*/,
-        unique: false
+        hardRegex: /(^(-)?[0-9]*\.[0-9]+[0-9]*$)|(^(-)?[0-9]+[0-9]*$)/,
+        softRegex: /(^(-)?[0-9]*\.[0-9]+[0-9]*)|(^(-)?[0-9]+[0-9]*)/,
+        print: "wordAndToken"
     },
-
+    {
+        name: "tk_menos",
+        hardRegex: /^-$/,
+        softRegex: /^-/,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_separa",
+        hardRegex: /^\[\]/,
+        softRegex: /^\[\]/,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_suma",
+        hardRegex: /^\+$/,
+        softRegex: /^\+/,
+        print: "onlyToken"
+    },
     {
         name: "mod",
-        regex: /^mod/,
-        unique: true
+        hardRegex: /^mod$/,
+        softRegex: /^mod/,
+        print: "onlyToken"
     },
     {
         name: "tk_div",
-        regex: /^\//,
-        unique: true
+        hardRegex: /^\/$/,
+        softRegex: /^\//,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_punto",
+        hardRegex: /^\.$/,
+        softRegex: /^\./,
+        print: "onlyToken"
+    },
+    {
+        name: "tk_swap",
+        hardRegex: /^:=:$/,
+        softRegex: /^:=:/,
+        print: "onlyToken"
     }
 ]
 
-//Regex for a comment
+//Additional Regexs
 const commentRegex = /#.*/;
-const beginOfStringRegex = /".+/;
-const endOfStringRegex = /.+"/;
+
+
+// Useful Variables
+var lexical_analysis;
+var partial_lexical_analysis;
+var wordsToAnalyse = []
+
+
+//Function to get next token
+function getNextToken(){
+    if(wordsToAnalyse.length==0)
+        lexicalAnalyzer(null, true)
+    token = wordsToAnalyse.shift()
+    findToken(token.word, token.row)
+    console.log(partial_lexical_analysis)
+}
 
 
 //Function that splits the code by breaklines and spaces to obtain the WORD
-function lexicalAnalyzer(input) {
+function lexicalAnalyzer(input, only_load) {
     var code;
-    var lexical_analysis = "";
-    var answer = "";
-    if (!input) code = document.getElementById("codeTextArea").value;
-    else code = input;
+    lexical_analysis = "";
+    if (!input)
+        code = document.getElementById("codeTextArea").value;
+    else
+        code = input;
     var lines = code.split(/\n/);
-    console.log(lines);
-    for (var i = 0; i < lines.length; i++) {
+    for(var i = 0; i < lines.length; i++){
         var line = lines[i].replace(commentRegex, '');
-        //var words = splitWithIndex(line);
-        console.log(count_white_spaces(line));
-        console.log("Processing line " + line.toString());
-        lexical_analysis += findToken(line.trim(), i + 1, count_white_spaces(line) + 1, answer);
-        // for(let word of words){
-        //   answer = "";
-        //   console.log("Entering");
-        //   console.log(word);
-        //     //if(word != "")
-        //       //lexical_analysis +=  findToken(word, i+1, answer)
-        // }
-    }
-    console.log("Analysis");
-    console.log(lexical_analysis);
-}
-
-function count_white_spaces(line) {
-    var counter = 0;
-    for (var i = 0; i < line.length; i++) {
-        if (line[i] == ' ') {
-            counter += 1
-        } else {
-            break;
-        }
-    }
-    return counter;
-}
-//Function that find the token that matches that WORD
-function findToken(word, row, column, answer) {
-    var matched = false;
-    //Check if the string is either empty or is composed of whitespaces
-    if (!word || (word.length === 0) || (word.match(/^\s*$/))) return answer
-    counter = 0;
-
-    var min_index_token = Number.MAX_SAFE_INTEGER;
-    var token_to_match;
-    for (let token of tokenList) {
-        // console.log("Comparision");
-        // console.log(token);
-        // console.log(word);
-        // console.log(word.match(token.regex));
-        if (word.match(token.regex)) {
-            matched = true;
-            counter += 1
-            // console.log("Which ");
-            // console.log(token);
-            // console.log(token.regex.exec(word));
-            // Get index of the matched regexep
-            // console.log(token.regex.exec(word).index);
-            if (token.regex.exec(word).index < min_index_token) {
-                min_index_token = token.regex.exec(word).index;
-                token_to_match = token;
+        var words = splitWithIndex(line)
+        for(let word of words){
+            if(word.name != ""){
+                if(!only_load){ //Sometimes we only need to load all the words but no do the analysis
+                    findToken(word, i+1)
+                    if(partial_lexical_analysis.match(/Error lexico/)){
+                        i = Number.MAX_SAFE_INTEGER //Force break of two loops
+                        break;
+                    }
+                }
+                wordsToAnalyse.push({word:word, row: i+1})
             }
         }
     }
-    console.log("Matched? " + matched);
+    if(!only_load)
+        console.log(lexical_analysis)
+}
+
+
+//Function that finds the token that matches that WORD, but only when it is an absolute match
+function findToken(word, row){
+    var matched = false;
+    for(let token of tokenList){
+        if(word.name.match(token.hardRegex)){
+            matched = true;
+            print(token, word.name, word.column, row)
+            break;
+        }
+    }
+    if(!matched){
+        deepFindToken(word.name, row, word.column)
+    }
+}
+
+
+//Function that finds the token that matches one word, but only when it is within another one
+function deepFindToken(word, row, column) {
+    var matched = false;
+    var min_index_token = Number.MAX_SAFE_INTEGER;
+    var token_to_match;
+    for (let token of tokenList) {
+        if (word.match(token.softRegex)) {
+            matched = true;
+            // Get index of the matched regexep
+            matched_word = token.softRegex.exec(word)
+            if (matched_word.index < min_index_token) {
+                min_index_token = matched_word.index;
+                token_to_match = token;
+            }else if(matched_word.index == min_index_token){ //Solve problem with global1(
+                if(token_to_match.softRegex.exec(word)[0] != matched_word[0])
+                    token_to_match = token;
+            }
+        }
+    }
     if (matched) {
-        console.log("Matched!");
-        console.log(token_to_match);
-        console.log(token_to_match.regex.exec(word));
-        console.log(token_to_match.regex.exec(word).index);
-        console.log("Matched!");
-        var matched_regexp = token_to_match.regex.exec(word)[0];
-        console.log("MATCHED REGULAR EXPRESSION");
-        console.log(matched_regexp);
-        //column += token_to_match.regex.exec(word).index;
-        if (token_to_match.name == "reserved")
-            answer += "<" + matched_regexp + "," + row + "," + column + ">\n";
-        else if (token_to_match.name == "id")
-            answer += "<" + token_to_match.name + "," + matched_regexp + "," + row + "," + column + ">\n";
-        else if (token_to_match.unique == true)
-            answer += "<" + token_to_match.name + "," + row + "," + column + ">\n";
-        else
-            answer += "<" + token_to_match.name + "," + matched_regexp + "," + row + "," + column + ">\n";
-        console.log("Answer until now");
-        console.log(answer + " " + word + " " + column + " " + row);
+        var matched_regexp = token_to_match.softRegex.exec(word)[0];
+        print(token_to_match, matched_regexp, column, row)
         if (!(word === matched_regexp) && (matched_regexp.length != 0)) {
             var cropped_word = word.replace(matched_regexp, '');
-
-            console.log("Next")
-            console.log(cropped_word.trim());
-
-            var offset = find_next_column(word, token_to_match.regex.exec(word).index + matched_regexp.length, cropped_word.trim());
-            console.log("Fixing");
-            console.log(token_to_match.regex.exec(word).index + matched_regexp.length);
-            console.log(word[token_to_match.regex.exec(word).index + matched_regexp.length ]);
-            console.log("offset " + offset);
-            column += matched_regexp.length + offset // + count_white_spaces(word);
-            return findToken(cropped_word.trim(), row, column, answer);
+            column += matched_regexp.length
+            deepFindToken(cropped_word.trim(), row, column);
         }
-
     } else {
-        answer += ">>> Error lexico(linea:" + row + ",posicion:" + column + ")\n"
-        return answer;
+        partial_lexical_analysis = ">>> Error lexico(linea:" + row + ",posicion:" + column + ")\n"
+        lexical_analysis += partial_lexical_analysis
     }
-    return answer;
 }
 
-function find_next_column(line, start, next) {
-    counter = 0;
-    for (var i = start; i < line.length; i++) {
-        if (line[i] == next[0]) {
-            break;
-        } else counter += 1;
-    }
-    return counter;
-}
+
 //Function that splits by spaces and saves the column of the word
-function splitWithIndex(line) {
-    var splits = line.split(/\s/)
-    var words = []
-    var index = 0
-    for (let split of splits) {
-        words.push({
-            column: index + 1,
-            name: split
-        })
+function splitWithIndex(line){
+    var splits = line.split(/\s(?=(?:(?:[^"]*"){2})*[^"]*$)/g);
+    var words=[]
+    var index=0
+    for(let split of splits){
+        if(split!='')
+            words.push({ column: index+1, name: split})
         index += split.length + 1
     }
-    console.log("words " + words.toString());
+
     return words
 }
+
+
+//Function that prints the token
+function print(token, word, column, row){
+    if (token.print == "onlyWord")
+        partial_lexical_analysis = "<" + word + "," + row + "," + column + ">\n";
+    else if (token.print == "onlyToken")
+        partial_lexical_analysis =  "<" + token.name + "," + row + "," + column + ">\n";
+    else if (token.print == "wordAndToken")
+        partial_lexical_analysis = "<" + token.name + "," + word + "," + row + "," + column + ">\n";
+
+    lexical_analysis += partial_lexical_analysis
+}
+
 
 //Function that reads a file
 function readTextFile(file) {
@@ -366,7 +390,111 @@ ifif
 if`
   const output4 = ` SIN GETARG ERROR LEXICO`
 
+const input5 = `90.00.50`;
+const output5 = `<tk_num,90.00,1,1>
+<tk_punto,1,6>
+<tk_num,50,1,7>`
 
+const input6 = `1&23948998`;
+const output6 = `<tk_num,1,1,1>
+>>> Error lexico(linea:1,posicion:2)`;
     console.log(lexicalAnalyzer(input1));
+
+const input7 = ``;
+
+const output7 = `<resource,1,1>
+<id,factorial,1,10>
+<tk_par_izq,1,19>
+<tk_par_der,1,20>
+<procedure,3,4>
+<id,fact,3,14>
+<tk_par_izq,3,18>
+<id,k,3,19>
+<tk_dos_puntos,3,20>
+<int,3,22>
+<tk_par_der,3,25>
+<returns,3,27>
+<id,f,3,35>
+<tk_dos_puntos,3,36>
+<int,3,38>
+<if,4,7>
+<id,k,4,10>
+<tk_menorque,4,12>
+<tk_num,0,4,14>
+<tk_ejecuta,4,16>
+<id,f,4,19>
+<tk_asig,4,21>
+<tk_num,-1,4,24>
+<tk_separa,5,7>
+<id,k,5,10>
+<tk_igual,5,12>
+<tk_num,0,5,14>
+<or,5,16>
+<id,k,5,19>
+<tk_igual,5,21>
+<tk_num,1,5,23>
+<tk_ejecuta,5,25>
+<id,f,5,28>
+<tk_asig,5,30>
+<tk_num,1,5,33>
+<tk_separa,6,7>
+<id,k,6,10>
+<tk_mayorque,6,12>
+<tk_num,1,6,14>
+<tk_ejecuta,6,16>
+<id,f,6,19>
+<tk_asig,6,21>
+<id,k,6,24>
+<tk_multi,6,26>
+<id,fact,6,28>
+<tk_par_izq,6,32>
+<id,k,6,33>
+<tk_menos,6,34>
+<tk_num,1,6,35>
+<tk_par_der,6,36>
+<fi,7,7>
+<end,8,4>
+<id,fact,8,8>
+<var,10,4>
+<id,n,10,8>
+<tk_dos_puntos,10,9>
+<int,10,11>
+<writes,11,4>
+<tk_par_izq,11,10>
+<tk_cadena,"Cuántos factoriales hay? ",11,11>
+<tk_par_der,11,38>
+<tk_punto_y_coma,11,39>
+<read,11,41>
+<tk_par_izq,11,45>
+<id,n,11,46>
+<tk_par_der,11,47>
+<write,12,4>
+<tk_par_izq,12,9>
+<tk_par_der,12,10>
+<fa,13,4>
+<id,i,13,7>
+<tk_asig,13,9>
+<tk_num,1,13,12>
+<to,13,14>
+<id,n,13,17>
+<tk_ejecuta,13,19>
+<write,14,7>
+<tk_par_izq,14,12>
+<id,i,14,13>
+<tk_coma,14,14>
+<tk_cadena,"el factorial es ",14,16>
+<tk_coma,14,34>
+<id,fact,14,36>
+<tk_par_izq,14,40>
+<id,i,14,41>
+<tk_par_der,14,42>
+<tk_par_der,14,43>
+<af,15,4>
+<end,16,1>
+<id,factorial,16,5>
+
+`;
+
+
 
 }
