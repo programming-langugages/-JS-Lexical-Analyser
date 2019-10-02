@@ -8,18 +8,26 @@
         <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
         <link rel="stylesheet" type="text/css" href="styles.css">
     </head>
     <body>
-        <div class="z-depth-2 header"><p>Analizador léxico SP</p></div>
+        <div class="z-depth-2 header"><p>Analizador léxico SP Language</p></div>
         <div class="customContainer">
             <div class="leftContainer">
                 <textarea rows="50" cols="50"  id="codeTextArea"></textarea>
-                <a class="waves-effect waves-light btn" onclick="lexicalAnalyzer();">Analizar léxico</a>
-                <a class="waves-effect waves-light btn" onclick="getNextToken();">Siguiente Token</a>
-                <a class="waves-effect waves-light btn" onclick="testInputs();">Probar inputs</a>
+                <div class="buttonsContainer">                   
+                    <a class="btn-floating btn-small  waves-effect waves-light red" onclick="lexicalAnalyzer();"><i class="material-icons">play_arrow</i></a>
+                    <a class="btn-floating btn-small  waves-effect waves-light" onclick="getNextToken();"><i class="material-icons">skip_next</i></a>  
+                    <a class="btn-floating btn-small  waves-effect waves-light" onclick="testInputs();"><i class="material-icons">file_copy</i></a>  
+                </div>    
+                <!-- <div class="codeContainer">
+                    <p id="code"></p>
+                </div> -->      
             </div>
             <div class="rightContainer">
+                <a class="clearButton btn-floating btn-small  waves-effect waves-light" onclick="clearAll();"><i class="material-icons">clear</i></a>
                 <p id="result"></p>
             </div>
         

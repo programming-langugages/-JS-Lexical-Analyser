@@ -2,15 +2,15 @@
 const tokenList = [
     {
         name: "reserved",
-        regex: /^(global|var|body|destroy|end|external|fa|fi|get|getarg|global|import|int|mod|new|op|process|read|real|ref|res|resource|returns|scanf|sem|sprintf|stop|to|val|var|write|writes)$/   
+        softRegex /^(global|var|body|destroy|end|external|fa|fi|get|getarg|global|import|int|mod|new|op|process|read|real|ref|res|resource|returns|scanf|sem|sprintf|stop|to|val|var|write|writes)$/   
     },
     {
         name: "id",
-        regex: /^[a-zA-Z]+[0-9]*$/
+        softRegex /^[a-zA-Z]+[0-9]*$/
     },
     { 
         name: "tk_asig",
-        regex: /:=/
+        softRegex /:=/
     }
 ]
 
