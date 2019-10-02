@@ -1,5 +1,5 @@
 //List of all tokens
-const tokenList = [
+var tokenList = [
     {
         name: "reserved",
         hardRegex: /^(global|body|create|destroy|external|getarg|get|global|import|int|mod|new|procedure|process|read|real|send|resource|returns|scanf|sem|sprintf|stop|writes|write|cap|ref|end|res|val|var|to|af|op|or|fa|fi|if)$/,
@@ -161,7 +161,7 @@ const tokenList = [
 ]
 
 //Additional Regexs
-const commentRegex = /#.*/;
+var commentRegex = /#.*/;
 
 
 // Useful Variables
@@ -211,7 +211,8 @@ function lexicalAnalyzer(input, only_load) {
                                         .replace(/>/g, '&gt;')
                                         .replace(/</g, '&lt;')
                                         .replace(/\n/g,'<br/>'))
-    }  
+        return lexical_analysis;
+    }
 }
 
 
@@ -309,19 +310,21 @@ function readTextFile(file) {
 }
 
 function testInputs() {
-    const input1 = `global sizes
-   # matrix dimension, default 10
-   var N := 10
-   # number of processes, default 2
-   var PR := 2
-   # strip size
-   var S : int
-   body sizes
+
+    const input1 =
+`    global sizes
+     # matrix dimension, default 10
+     var N := 10
+     # number of processes, default 2
+     var PR := 2
+     # strip size
+     var S : int
+  body sizes
      getarg(1, N); getarg(2, PR); S := N/PR
      if N mod PR != 0 ->
        write("N must be a multiple of PR"); stop (1)
      fi
-   end`;
+  end`;
 
     const output1 = `<global,1,1>
 <id,sizes,1,8>
@@ -375,8 +378,7 @@ function testInputs() {
 <tk_num,1,11,49>
 <tk_par_der,11,50>
 <fi,12,4>
-<end,13,1>
-                  `;
+<end,13,1>`;
     const input2 = `2.5598055not3!=88&56.a`;
 
     const output2 = `<tk_num,2.5598055,1,1>
@@ -403,7 +405,7 @@ const output5 = `<tk_num,90.00,1,1>
 const input6 = `1&23948998`;
 const output6 = `<tk_num,1,1,1>
 >>> Error lexico(linea:1,posicion:2)`;
-    console.log(lexicalAnalyzer(input1));
+
 
 const input7 = ``;
 
@@ -500,6 +502,13 @@ const output7 = `<resource,1,1>
 
 `;
 
+console.log(lexicalAnalyzer(input1))
+  console.log("Testing all inputs!");
+  for (var i = 1; i <= 7; ++i) {
+    var to_execute = "(lexicalAnalyzer(input" + i.toString() + ",false)).trim() == " + "output" + i.toString() + ".trim()" ;
+    console.log(to_execute);
+    console.log( eval("(lexicalAnalyzer(input" + i.toString() + ",false)).trim()"));
+    console.log(eval(to_execute));
 
-
+  }
 }
