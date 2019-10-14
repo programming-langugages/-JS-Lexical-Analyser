@@ -169,7 +169,6 @@ var lexical_analysis;
 var partial_lexical_analysis;
 var wordsToAnalyse = []
 
-
 //Function to get next token
 function getNextToken(){
     if(wordsToAnalyse.length==0)
@@ -177,13 +176,17 @@ function getNextToken(){
     token = wordsToAnalyse.shift()
     findToken(token.word, token.row)
     console.log(partial_lexical_analysis)
+    $('#result').append(partial_lexical_analysis.replace(/&/g, '&amp;')
+                                        .replace(/>/g, '&gt;')
+                                        .replace(/</g, '&lt;')
+                                        .replace(/\n/g,'<br/>'))
 }
 
 
 //Function that splits the code by breaklines and spaces to obtain the WORD
 function lexicalAnalyzer(input, only_load) {
-    var code;
     lexical_analysis = "";
+    var code;
     if (!input)
         code = document.getElementById("codeTextArea").value;
     else
@@ -207,6 +210,7 @@ function lexicalAnalyzer(input, only_load) {
     }
     if(!only_load){
         console.log(lexical_analysis)
+        $('#code').html(code.replace(/\n/g,'<br/>'))
         $('#result').html(lexical_analysis.replace(/&/g, '&amp;')
                                         .replace(/>/g, '&gt;')
                                         .replace(/</g, '&lt;')
@@ -308,6 +312,15 @@ function readTextFile(file) {
     }
     rawFile.send(null);
 }
+
+//Function that clears the input
+function clearAll(){
+    console.log("Clearing")
+    wordsToAnalyse = []
+    $('#result').html('')
+}
+
+
 
 function testInputs() {
 

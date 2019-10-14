@@ -30,10 +30,11 @@ p{
     width: 50%;
     height: calc(100% - 20px);
     margin-top: 20px;
+    position: relative
 }
 
 .leftContainer textarea{
-    height: 50%;
+    height: calc(100% - 20px);
 }
 
 .rightContainer{
@@ -42,8 +43,31 @@ p{
     padding-left: 10px;
     background-color: #444;
     overflow-y: scroll;
+    position: relative;
 }
 
 #result{
     color: wheat;
+}
+
+.buttonsContainer{
+    position: absolute;
+    top: 0%;
+    right: 0;
+    margin: 10px;
+}
+
+.clearButton{
+    position: fixed;
+    right: 16px;
+    margin: 10px;
+}
+
+.codeContainer{
+    overflow-y: auto;
+    height: 50%;
+}
+
+.token_reserved{
+    background-color: lightblue;
 }
